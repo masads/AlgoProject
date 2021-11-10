@@ -1,0 +1,5 @@
+/benchmark
+/node_modules
+/uploads/*txt
+*pdf
+*lock
