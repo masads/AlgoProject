@@ -5,6 +5,7 @@ function main()
     let data={};
     const algo=document.getElementById("showAlgo").value;
     readfile(data);
+    console.log(data);
     if(algo=="Prims")
     {
         Prims(data);
@@ -59,6 +60,7 @@ function readfile(data)
         }
         key+=data.totalnodes;
         data["find"]=JSON.parse(array[key+1]);
+        console.log(data.totalnodes);
     });
     } else {
         alert('Please upload a file before continuing')
@@ -66,11 +68,11 @@ function readfile(data)
 }
 function Prims(data)
 {
-    
+    d3.select("#body").style('background-color','yellow');
 }
 function Kruskal(data)
 {
-    
+    d3.select("#body").style('background-color','blue');
 }
 function Dijkstra(data)
 {
