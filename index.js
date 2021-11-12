@@ -1,7 +1,34 @@
-document.getElementById("submit").onclick = readfile;
-let data={};
+document.getElementById("submit").onclick = main;
 
-function readfile()
+function main()
+{
+    let data={};
+    const algo=document.getElementById("showAlgo").value;
+    readfile(data);
+    if(algo=="Prims")
+    {
+        Prims(data);
+    }else if(algo=="Kruskal")
+    {
+       Kruskal(data);
+    }else if(algo=="Dijkstra")
+    {
+       Dijkstra(data);
+    }else if(algo=="Bellman Ford")
+    {
+        BellmanFord(data);
+    }else if(algo=="Floyd Warshall Algorithm")
+    {
+        FloydWarshall(data);
+    }else if(algo=="Clustering Coefficient in Graph Theory")
+    {
+        ClusteringCoefficientGraph(data);
+    }else if(algo=="Borůvka's algorithm")
+    {
+       Borůvka(data);
+    }
+}
+function readfile(data)
 {
     let fileInput=document.getElementById('myFile');
     let input=fileInput;
@@ -36,4 +63,32 @@ function readfile()
     } else {
         alert('Please upload a file before continuing')
     } 
+}
+function Prims(data)
+{
+    
+}
+function Kruskal(data)
+{
+    
+}
+function Dijkstra(data)
+{
+    
+}
+function BellmanFord(data)
+{
+    
+}
+function FloydWarshall(data)
+{
+    
+}
+function ClusteringCoefficientGraph(data)
+{
+    
+}
+function Borůvka(data)
+{
+    
 }
