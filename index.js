@@ -1,96 +1,60 @@
 document.getElementById("submit").onclick = main;
-
+network.on('click', function(properties) {
+    var ids = properties.nodes;
+    var clickedNodes = nodes.get(ids);
+    console.log('clicked nodes:', clickedNodes);
+ });
 function main()
 {
-    let data={};
-    const algo=document.getElementById("showAlgo").value;
-    readfile(data);
-    console.log(data);
-    if(algo=="Prims")
+    const readfile=new Promise((resolve,reject)=>
     {
-        Prims(data);
-    }else if(algo=="Kruskal")
-    {
-       Kruskal(data);
-    }else if(algo=="Dijkstra")
-    {
-       Dijkstra(data);
-    }else if(algo=="Bellman Ford")
-    {
-        BellmanFord(data);
-    }else if(algo=="Floyd Warshall Algorithm")
-    {
-        FloydWarshall(data);
-    }else if(algo=="Clustering Coefficient in Graph Theory")
-    {
-        ClusteringCoefficientGraph(data);
-    }else if(algo=="Borůvka's algorithm")
-    {
-       Borůvka(data);
-    }
-}
-function readfile(data)
-{
-    let fileInput=document.getElementById('myFile');
-    let input=fileInput;
-    let reader = new FileReader();
-    if (input.files.length) {
-        let textFile = input.files[0];
-        reader.readAsText(textFile);
-        reader.addEventListener('load', (event) => {
-        const arr = event.target.result;
-        const array=arr.toString().split('\n');
-        let key=2;
-        data.totalnodes=(JSON.parse(array[key]));
-        key+=2;
-        for(let i=0;i<data.totalnodes;i++)
-        {
-          data[`node${i}`]={"positionX":0,"positionY":0,"nodeTo":{}}
-          data[`node${i}`].positionX=JSON.parse(array[key+i].split('\t')[1]);
-          data[`node${i}`].positionY=JSON.parse(array[key+i].split('\t')[2]);
-        }
-        key+=data.totalnodes+1;
-        for(let i=0;i<=data.totalnodes;i++)
-        {
-            let temp=array[key+i].split('\t');
-            for(let j=0,k=0;j<temp[0];j++,k+=4)
+        let data={};
+        let fileInput=document.getElementById('myFile');
+        let input=fileInput;
+        let reader = new FileReader();
+        if (input.files.length>0) {
+            let textFile = input.files[0];
+            reader.readAsText(textFile);
+            reader.addEventListener('load', (event) => {
+            const arr = event.target.result;
+            const array=arr.toString().split('\n');
+            let key=2;
+            data.totalnodes=(JSON.parse(array[key]));
+            key+=2;
+            for(let i=0;i<data.totalnodes;i++)
             {
-              data[`node${i}`].nodeTo[`node${temp[1+k]}`]=JSON.parse(temp[3+k]);
+                data[i]={"positionX":0,"positionY":0,"nodeTo":[]}
+                data[i].positionX=JSON.parse(array[key+i].split('\t')[1]);
+                data[i].positionY=JSON.parse(array[key+i].split('\t')[2]);
             }
-        }
-        key+=data.totalnodes;
-        data["find"]=JSON.parse(array[key+1]);
-        console.log(data.totalnodes);
+            key+=data.totalnodes+1;
+            for(let i=0;i<=data.totalnodes;i++)
+            {
+                let temp=array[key+i].split('\t');
+                for(let j=0,k=0;j<temp[0];j++,k+=4)
+                {
+                    data[i].nodeTo[j]={"to":0,"cost":0};
+                    data[i].nodeTo[j].to=temp[1+k];
+                    data[i].nodeTo[j].cost=((JSON.parse(temp[3+k]))/10000000).toFixed(1);
+                }
+            }
+            key+=data.totalnodes;
+            data["find"]=JSON.parse(array[key+1]);
+            console.log(data);
+            resolve(data);
+        });
+        } else {
+            reject();
+        } 
     });
-    } else {
-        alert('Please upload a file before continuing')
-    } 
-}
-function Prims(data)
-{
-    d3.select("#body").style('background-color','yellow');
-}
-function Kruskal(data)
-{
-    d3.select("#body").style('background-color','blue');
-}
-function Dijkstra(data)
-{
-    
-}
-function BellmanFord(data)
-{
-    
-}
-function FloydWarshall(data)
-{
-    
-}
-function ClusteringCoefficientGraph(data)
-{
-    
-}
-function Borůvka(data)
-{
-    
+    readfile.then(
+        (data)=>
+        {
+            graph(data);
+        },
+        ()=>
+        {
+            alert('Please upload a file before continuing');
+        }
+    )
 }
