@@ -20,14 +20,12 @@ function graph(data) {
     };
     const gtype=document.getElementById("showgraph").value; 
     options = { 
-        physics: (gtype=="directed") ? false:true,
+        physics: (gtype=="directed") ? false:false,
         edges: {
 
             width: 1
           },
-        
     };
-    console.log(arrowOrNot);
     network = new vis.Network(container, data1, options);
     k=1;
     if(gtype=="directed")
@@ -41,14 +39,11 @@ function graph(data) {
     {
         for(let j=0;j<Object.keys(graphData[i].nodeTo).length;j++)
         {
-                
-                edges.add([{id:`${k}`,from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,arrows: arrowOrNot,label: `${graphData[i].nodeTo[j].cost}`,}]);
-                k++;
-
+                setTimeout(() => {
+                    edges.add([{id:`${k++}`,from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,arrows: arrowOrNot,label: `${graphData[i].nodeTo[j].cost}`,}]);
+                }, 100*k);
         }
     }
-
-
 }
 
 function apply()
@@ -69,7 +64,6 @@ function Kruskal()
 function Prims()
 {
     let g =new Graph(graphData.totalnodes);
-    k=1;
     const gtype=document.getElementById("showgraph").value;
     if(gtype=="directed")
     {
@@ -83,11 +77,92 @@ function Prims()
     {
         for(let j=0;j<Object.keys(graphData[i].nodeTo).length;j++)
         {
-            if(graphData[i].nodeTo[j].to>i)
+
+                if(graphData[i].nodeTo[j].to!=i ){
+                    let flag=0;
+                    let u=i,v=graphData[i].nodeTo[j].to,w=graphData[i].nodeTo[j].cost;
+                    for(let i=0;i<g.adjacencylist[v].length;i++){
+                        if(g.adjacencylist[v][i].v==u && g.adjacencylist[v][i].u==v && g.adjacencylist[v][i].weight>=w)
+                        {
+                            flag=1;
+                            break;
+                        }else if(g.adjacencylist[v][i].v==u && g.adjacencylist[v][i].u==v && g.adjacencylist[v][i].weight<w)
+                        {
+                            flag=1;
+                            break;
+                        }
+                    }
+                    if(flag==0)
+                    {
+                        g.addEdge(i.toString(),graphData[i].nodeTo[j].to,graphData[i].nodeTo[j].cost);
+                    }
+                }
+        }
+    }
+    for(let i=0;i<g.adjacencylist.length;i++)
+    {
+        if(g.adjacencylist[i].length!=0)
+        {
+            let find=[];
+            let arr=[];
+            for(let j=0;j<g.adjacencylist[i].length;j++)
             {
-                
-                g.addEdge(i,graphData[i].nodeTo[j].to,graphData[i].nodeTo[j].cost);
-                edges1.add([{id:`${k}`,from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,arrows: arrowOrNot,label: `${graphData[i].nodeTo[j].cost}`,}]);
+                if(arr[g.adjacencylist[i][j].v]==undefined)
+                {
+                    arr[g.adjacencylist[i][j].v]=1;
+                }else
+                {
+                    find.push({index:j,value:g.adjacencylist[i][j]});
+                }
+            }
+            for(let j=0;j<find.length;j++)
+            {
+                for(let k=0;k<g.adjacencylist[i].length;k++)
+                {
+                    let flag=0;
+                    if(g.adjacencylist[i][k]!=undefined)
+                    {
+                        if(find[j].value.v==g.adjacencylist[i][k].v)
+                        {   
+                            if(find[j].value.weight>g.adjacencylist[i][k].weight)
+                            {
+                                
+                                delete g.adjacencylist[i][find[j].index];
+                                
+                            }else
+                            {
+                                delete g.adjacencylist[i][k];
+                                
+                            }
+                            flag =1;
+                        }
+                    }
+                    if(flag ==1)
+                    {
+                        break;
+                    }
+                }
+            }
+            let temp=[];
+            let tempi=0;
+            for(let j=0;j<g.adjacencylist[i].length;j++){
+                if(g.adjacencylist[i][j]!=undefined){
+                    temp[tempi]=g.adjacencylist[i][j];
+                    tempi++;
+                }
+            }
+            g.adjacencylist[i]=temp;
+        }
+    }
+    console.log(g.adjacencylist);
+    k=1;
+    for(i=0;i<g.adjacencylist.length;i++)
+    {
+        if(g.adjacencylist[i].length!=0)
+        {
+            for(let j=0;j<g.adjacencylist[i].length;j++)
+            {
+                edges1.add([{id:`${k}`,from:`${i}`, to: `${g.adjacencylist[i][j].v}`,arrows: arrowOrNot,label: `${g.adjacencylist[i][j].weight}`,}]);
                 k++;
             }
         }
@@ -99,17 +174,17 @@ function Prims()
     data1=data2;
     network = new vis.Network(container, data1, options);
     let result=g.primMST();
+    console.log(result);
     k=1;
-    for(let i=0;i<graphData.totalnodes;i++)
+    for(i=0;i<g.adjacencylist.length;i++)
     {
-        for(let j=0;j<Object.keys(graphData[i].nodeTo).length;j++)
+        if(g.adjacencylist[i].length!=0)
         {
-            if(graphData[i].nodeTo[j].to>i)
-            { 
+            for(let j=0;j<g.adjacencylist[i].length;j++)
+            {
                 for(let l=0;l<result.length;l++)
                 {
-                    
-                    if(result[l].parent==data1.edges._data[`${k}`].from && l==data1.edges._data[`${k}`].to)
+                    if(result[l].parent==i && l==g.adjacencylist[i][j].v)
                     {
                         data1.edges._data[`${k}`]["color"]={color:'red'};
                     }
