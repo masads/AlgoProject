@@ -3,8 +3,10 @@ let k;
 var container = document.getElementById("mynetwork");
 var options
 document.getElementById("apply").onclick = apply;
+let gtype;
 let arrowOrNot="";
 function graph(data) {
+    gtype=document.getElementById("showgraph").value; 
     graphData=data;
     nodes = new vis.DataSet();
     for(let i=0;i<graphData.totalnodes;i++)
@@ -18,12 +20,10 @@ function graph(data) {
         nodes: nodes,
         edges: edges,
     };
-    const gtype=document.getElementById("showgraph").value; 
     options = { 
-        physics: (gtype=="directed") ? false:false,
+        physics: (gtype=="directed") ? true:false,
         edges: {
-
-            width: 1
+            width: 2
           },
     };
     network = new vis.Network(container, data1, options);
@@ -51,7 +51,15 @@ function apply()
     const algo=document.getElementById("showAlgo").value;
     if(algo=="Prims")
     {
-        Prims();
+
+        if(gtype!="directed")
+        {
+            Prims();
+        }else
+        {
+            alert("Prims cant be apply to directed graph")
+        }
+        
     }else if(algo=="Kruskal")
     {
         Kruskal();
@@ -65,13 +73,6 @@ function Prims()
 {
     let g =new Graph(graphData.totalnodes);
     const gtype=document.getElementById("showgraph").value;
-    if(gtype=="directed")
-    {
-        arrowOrNot="to";
-    }else
-    {
-        arrowOrNot="";
-    }
     edges1 = new vis.DataSet();
     for(let i=0;i<graphData.totalnodes;i++)
     {
@@ -154,7 +155,6 @@ function Prims()
             g.adjacencylist[i]=temp;
         }
     }
-    console.log(g.adjacencylist);
     k=1;
     for(i=0;i<g.adjacencylist.length;i++)
     {
@@ -162,7 +162,7 @@ function Prims()
         {
             for(let j=0;j<g.adjacencylist[i].length;j++)
             {
-                edges1.add([{id:`${k}`,from:`${i}`, to: `${g.adjacencylist[i][j].v}`,arrows: arrowOrNot,label: `${g.adjacencylist[i][j].weight}`,}]);
+                edges1.add([{id:`${k}`,from:`${i}`, to: `${g.adjacencylist[i][j].v}`,label: `${g.adjacencylist[i][j].weight}`,}]);
                 k++;
             }
         }
@@ -174,7 +174,6 @@ function Prims()
     data1=data2;
     network = new vis.Network(container, data1, options);
     let result=g.primMST();
-    console.log(result);
     k=1;
     for(i=0;i<g.adjacencylist.length;i++)
     {
