@@ -1,7 +1,7 @@
 document.getElementById("submit").onclick = main;
 network.on('click', function(properties) {
     var ids = properties.nodes;
-    var clickedNodes = nodes.get(ids);
+    // var clickedNodes = nodes.get(ids);
  });
 function main()
 {
