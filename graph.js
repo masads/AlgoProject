@@ -412,7 +412,6 @@ class Graph {
     for (let i = 0; i < this.vertices; ++i) {
       graph.push([]);
     }
-    console.log(this.adjacencylist);
     for (let i = 0; i < this.vertices; ++i) {
       for (let j = 0; j < this.vertices; ++j) {
         graph[i].push(0);
@@ -420,12 +419,10 @@ class Graph {
     }
     for (let i = 0; i < this.vertices; ++i) {
       for (let j = 0; j < this.adjacencylist[i].length; ++j) {
-        //    console.log("  " + this.adjacencylist[i][j].to);
         let z = this.adjacencylist[i][j].to;
         graph[i][z] = this.adjacencylist[i][j].weight;
       }
     }
-    console.log(graph);
     return this.primMST(graph);
   }
   MakeKruskal() {

@@ -1,8 +1,8 @@
 document.getElementById("submit").onclick = main;
-network.on('click', function(properties) {
-    var ids = properties.nodes;
-    // var clickedNodes = nodes.get(ids);
- });
+// network.on('click', function(properties) {
+//     var ids = properties.nodes;
+//     // var clickedNodes = nodes.get(ids);
+//  });
 function main()
 {
     const readfile=new Promise((resolve,reject)=>
@@ -39,7 +39,6 @@ function main()
             }
             key+=data.totalnodes;
             data["find"]=JSON.parse(array[key+1]);
-            console.log(data);
             resolve(data);
         });
         } else {
@@ -49,7 +48,7 @@ function main()
     readfile.then(
         (data)=>
         {
-            graph(data);
+            MakeGraph(data);
         },
         ()=>
         {
