@@ -6,9 +6,14 @@ function MakeGraph(data)
 {
     graphData=data;
     nodes = new vis.DataSet();
+    let distanceAway=20;
+    if(graphData.totalnodes/2>40)
+    {
+        distanceAway=40
+    }
     for(let i=0;i<graphData.totalnodes;i++)
     {
-        nodes.add([{id:`${i}`,label:`Node ${i} `,x:`${graphData[i].positionX*1500}`,y:`${graphData[i].positionY*1500}`}]);
+        nodes.add([{id:`${i}`,label:`Node ${i} `,x:`${graphData[i].positionX*180*distanceAway}`,y:`${graphData[i].positionY*180*distanceAway}`}]);
     }
     edges = new vis.DataSet();
     VisData = {
@@ -17,9 +22,34 @@ function MakeGraph(data)
     };
     options = { 
         physics: false,
-        edges: {
-            width: 2
+        nodes: {
+            shape: "dot",
+            size: 40,
+            shadow: true,
+            color: {
+                background: 'rgb(226, 226, 226)',
+                border: 'rgba(85, 85, 85, 0.836)',
+                highlight: {
+                    border: 'rgba(85, 85, 85, 0.836)',
+                    background: 'rgb(226, 226, 226)'
+                    }
+                },
+            font: {
+              size: 40,
+              color: "black",
+            },
+            borderWidth: 4,
           },
+        edges: {
+            width: 10,
+            
+            shadow: true,
+            font: {
+                size:50,
+                color: "black",
+              }
+          },
+          
     };
     network = new vis.Network(container, VisData, options);
     const algo=document.getElementById("showAlgo").value;
@@ -37,8 +67,8 @@ function MakeGraph(data)
             if(arrowOrNot=="to")
             {
                 setTimeout(() => {
-                edges.add([{from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,label: `${graphData[i].nodeTo[j].cost}`,arrows:arrowOrNot,smooth: {type: 'curvedCW', roundness: 0.1}}]);
-                }, 10*i);
+                edges.add([{from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,label: `${graphData[i].nodeTo[j].cost}`,arrows:arrowOrNot,smooth: {type: 'curvedCW', roundness: 0.15}}]);
+                }, 1*i);
             }
             else
             {
@@ -48,12 +78,12 @@ function MakeGraph(data)
                     {
                         setTimeout(() => {
                             edges.add([{from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,arrows:arrowOrNot}]);
-                            }, 10*i);
+                            }, 1*i);
                     }else
                     {
                         setTimeout(() => {
                             edges.add([{from:`${i}`, to: `${graphData[i].nodeTo[j].to}`,label: `${graphData[i].nodeTo[j].cost}`,arrows:arrowOrNot}]);
-                            }, 10*i);
+                            }, 1*i);
                     }
                 }
             }
@@ -115,9 +145,9 @@ function Prims()
              if(u==VisData.edges._data[`${id}`].from && v==VisData.edges._data[`${id}`].to)
             {
                 setTimeout(() => {
-                VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`]["color"]={color:'black'};
                 network = new vis.Network(container, VisData, options);
-                }, 10*j);
+                }, 1*j);
             }
         }
     }
@@ -156,9 +186,9 @@ function kruskal()
              if(u==VisData.edges._data[`${id}`].from && v==VisData.edges._data[`${id}`].to)
             {
                 setTimeout(() => {
-                VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`]["color"]={color:'black'};
                 network = new vis.Network(container, VisData, options);
-                }, 10*j);
+                }, 1*j);
             }
         }
     }
@@ -199,9 +229,9 @@ function Dijkstra()
              if(u==VisData.edges._data[`${id}`].from && v==VisData.edges._data[`${id}`].to)
             {
                 setTimeout(() => {
-                VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`]["color"]={color:'black'};
                 network = new vis.Network(container, VisData, options);
-                }, 10*j);
+                }, 1*j);
                 sum+=parseFloat(VisData.edges._data[`${id}`]["label"]);
             }
         }
@@ -244,9 +274,9 @@ function BellmanFord()
             {
                 console.log(u+"--"+v);
                 setTimeout(() => {
-                VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`]["color"]={color:'black'};
                 network = new vis.Network(container, VisData, options);
-                }, 10*j);
+                }, 1*j);
                 break;
             }
         }
@@ -288,9 +318,9 @@ function Floyd()
              if(u==VisData.edges._data[`${id}`].from && v==VisData.edges._data[`${id}`].to)
             {
                 setTimeout(() => {
-                VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`]["color"]={color:'black'};
                 network = new vis.Network(container, VisData, options);
-                }, 10*j);
+                }, 1*j);
                 sum+=parseFloat(VisData.edges._data[`${id}`]["label"]);
                 break;
             }
@@ -330,10 +360,10 @@ function Boruvka()
                 result[j].to=-1;
                 result[j].from=-1;
                 setTimeout(() => {
-                VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`]["color"]={color:'black'};
                 VisData.edges._data[`${id}`].hidden = false;
                 network = new vis.Network(container, VisData, options);
-                }, 10*j);
+                }, 1*j);
             }
         }
     }
@@ -350,7 +380,7 @@ function Clustering()
             g.addEdge(i,parseInt(graphData[i].nodeTo[j].to),parseFloat(graphData[i].nodeTo[j].cost));
         }
     }
-    let result = g.CoefficientClustering(graphData.find);
+    let result = g.CoefficientClustering();
     let i=0;
     for (let id in VisData.nodes._data ) 
     {

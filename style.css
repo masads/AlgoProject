@@ -1,15 +1,21 @@
 #mynetwork {
     width: 100%;
-    height: 1000px;
-    border: 1px solid lightgray;
+    height: 700px;
+    border: 8px solid rgba(0, 0, 0, 0.836);
+    margin-top: -30px;
+    /* background-color: rgb(184, 184, 184); */
   }
   html,
 body {
   font: 11pt arial;
+  background-color:rgb(226, 226, 226);
 }
-
+label
+{
+  font-size: 1.5em;
+}
 h1 {
-  font-size: 150%;
+  font-size: 400%;
   margin: 5px 0;
 }
 
@@ -44,4 +50,22 @@ pre {
   margin: 0;
   padding: 5px;
   font-size: 10pt;
+}
+.btn
+{
+  background-color: rgb(226, 226, 226);
+  border-color: rgba(85, 85, 85, 0.836);
+  color: rgba(0, 0, 0, 0.836);
+}
+.btn:hover
+{
+  background-color: rgba(0, 0, 0, 0.836);
+  border-color: rgb(226, 226, 226);
+  color: rgb(226, 226, 226);
+}
+.btn:focus
+{
+  background-color: rgba(0, 0, 0, 0.836);
+  border-color: rgb(226, 226, 226);
+  color: rgb(226, 226, 226);
 }

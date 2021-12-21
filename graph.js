@@ -10,7 +10,6 @@ class Graph {
     this.adjacencylist[u].push({ to: v, weight: weight });
   }
   printGraph() {
-    console.log(this.adjacencylist);
     for (let i = 0; i < this.vertices; ++i) {
       console.log(" \n [" + i + "] :");
       for (let j = 0; j < this.adjacencylist[i].length; ++j) {
@@ -19,62 +18,33 @@ class Graph {
     }
   }
   primMST(graph) {
-    console.log(graph);
+    
     let length = graph.length;
     let INF=100000000;
     let minKey = (key, mstSet, length) => {
-      // Initialize min value
       let min = INF,
         min_index;
-
       for (let v = 0; v < length; v++)
         if (mstSet[v] == false && key[v] < min) (min = key[v]), (min_index = v);
-
       return min_index;
     };
 
-    // Array to store constructed MST
     let parent = [];
-
-    // Key values used to pick minimum weight edge in cut
     let key = [];
-
-    // To represent set of vertices included in MST
     let mstSet = [];
-
-    // Initialize all keys as INFINITE
     for (let i = 0; i < length; i++)
       (key[i] = INF), (mstSet[i] = false);
-
-    // Always include first 1st vertex in MST.
-    // Make key 0 so that this vertex is picked as first vertex.
     key[0] = 0;
-    parent[0] = -1; // First node is always root of MST
-
-    // The MST will have V vertices
+    parent[0] = -1; 
     for (let count = 0; count < length - 1; count++) {
-      // Pick the minimum key vertex from the
-      // set of vertices not yet included in MST
       let u = minKey(key, mstSet, length);
-
-      // Add the picked vertex to the MST Set
       mstSet[u] = true;
-
-      // Update key value and parent index of
-      // the adjacent vertices of the picked vertex.
-      // Consider only those vertices which are not
-      // yet included in MST
       for (let v = 0; v < length; v++)
       {
-        // graph[u][v] is non zero only for adjacent vertices of m
-        // mstSet[v] is false for vertices not yet included in MST
-        // Update the key only if graph[u][v] is smaller than key[v]
         if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
           {(parent[v] = u), (key[v] = graph[u][v]);}
       }
     }
-
-    // print the constructed MST
     let result = [];
     for (let i = 1; i < length; i++) {
       result.push({ from: parent[i], to: i, cost: graph[parent[i]][i] });
@@ -96,10 +66,7 @@ class Graph {
       let b = find(j);
       parent[a] = b;
     };
-    // Initialize sets of disjoint sets.
     for (let i = 0; i < V; i++) parent[i] = i;
-
-    // Include minimum weight edges one by one
     let edge_count = 0;
     while (edge_count < V - 1) {
       let min = INF,
@@ -124,7 +91,6 @@ class Graph {
     return result;
   }
   minDistance(dist, sptSet, V) {
-    // Initialize min value
     let min = Number.MAX_VALUE;
     let min_index = -1;
 
@@ -137,7 +103,7 @@ class Graph {
     return min_index;
   }
   DprintPath(parent, j) {
-    // Base Case : If j is source
+
     if (parent[j] == -1) return -1;
 
     let res = this.DprintPath(parent, parent[j]);
@@ -172,37 +138,18 @@ class Graph {
     let dist = new Array(V);
     let sptSet = new Array(V);
     let parent = new Array(V);
-    // Initialize all distances as
-    // INFINITE and stpSet[] as false
     for (let i = 0; i < V; i++) {
       dist[i] = INF;
       sptSet[i] = false;
-      // path[i]=[];
     }
 
-    // Distance of source vertex
-    // from itself is always 0
     dist[src] = 0;
     parent[src] = -1;
-    // Find shortest path for all vertices
     for (let count = 0; count < V - 1; count++) {
-      // Pick the minimum distance vertex
-      // from the set of vertices not yet
-      // processed. u is always equal to
-      // src in first iteration.
+
       let u = this.minDistance(dist, sptSet, V);
-
-      // Mark the picked vertex as processed
       sptSet[u] = true;
-
-      // Update dist value of the adjacent
-      // vertices of the picked vertex.
       for (let v = 0; v < V; v++) {
-        // Update dist[v] only if is not in
-        // sptSet, there is an edge from u
-        // to v, and total weight of path
-        // from src to v through u is smaller
-        // than current value of dist[v]
         if (
           !sptSet[v] &&
           graph[u][v] != 0 &&
@@ -215,7 +162,6 @@ class Graph {
       }
     }
 
-    // Print the constructed distance array
     return this.DprintSolution(dist, V, parent, src);
   }
   BprintPath(parent, vertex, source, j) {
@@ -233,15 +179,9 @@ class Graph {
     return path;
   }
   BellmanFord(graph, V, E, src) {
-    // Initialize distance of all vertices as infinite.
     let dis = Array(V).fill(1000000000);
     let parent = new Array(V).fill(-1);
-    // initialize distance of source as 0
     dis[src] = 0;
-
-    // Relax all edges |V| - 1 times. A simple
-    // shortest path from src to any other
-    // vertex can have at-most |V| - 1 edges
 
     for (var i = 0; i < V - 1; i++) {
       for (var j = 0; j < E; j++) {
@@ -285,13 +225,8 @@ class Graph {
   constructPath(Next,u, v)
   {
       console.log(Next)
-      // If there's no path between
-      // node u and v, simply return
-      // an empty array
       if (Next[u][v] == -1)
           return null;
-    
-      // Storing the path in a vector
       let path = [];
       path.push(u);
         
@@ -312,8 +247,6 @@ class Graph {
             for(let j = 0; j < V; j++)
             {
                 
-                // We cannot travel through
-                // edge that doesn't exist
                 if (dis[i][k] == INF ||
                     dis[k][j] == INF)
                     continue;
@@ -430,6 +363,7 @@ class Graph {
         graph[i][z] = this.adjacencylist[i][j].weight;
       }
     }
+    console.log(graph);
     return this.primMST(graph);
   }
   MakeKruskal() {
@@ -471,19 +405,6 @@ class Graph {
         graph[i][z] = parseInt(this.adjacencylist[i][j].weight);
       }
     }
-    console.log(graph);
-  //   let graph = [ 
-  //     [ 0, 4, 0, 0, 0, 0, 0, 8, 0 ],
-  //     [ 4, 0, 8, 0, 0, 0, 0, 11, 0 ],
-  //     [ 0, 8, 0, 7, 0, 4, 0, 0, 2 ],
-  //     [ 0, 0, 7, 0, 9, 14, 0, 0, 0 ],
-  //     [ 0, 0, 0, 9, 0, 10, 0, 0, 0 ],
-  //     [ 0, 0, 4, 14, 10, 0, 2, 0, 0 ],
-  //     [ 0, 0, 0, 0, 0, 2, 0, 1, 6 ],
-  //     [ 8, 11, 0, 0, 0, 0, 1, 0, 7 ],
-  //     [ 0, 0, 2, 0, 0, 0, 6, 7, 0 ] 
-  // ];
-
     return this.dijkstra(graph, s);
   }
   MakeBellman(src) {
@@ -499,15 +420,6 @@ class Graph {
       }
     }
     console.log(graph);
-    // var graph = [
-    //         [ 0, 1, -1 ],
-    //         [ 0, 2, 4 ],
-    //         [ 1, 2, 3 ],
-    //         [ 1, 3, 2 ],
-    //         [ 1, 4, 2 ],
-    //         [ 3, 2, 5 ],
-    //         [ 3, 1, 1 ],
-    //         [ 4, 3, -3 ]];
     return this.BellmanFord(graph, this.vertices, graph.length, src);
   }
   MakeFloyd(u,v)
@@ -530,10 +442,8 @@ class Graph {
         } 
       }
     }
-    // console.log(this.adjacencylist)
     for (let i = 0; i < this.vertices; ++i) {
       for (let j = 0; j < this.adjacencylist[i].length; ++j) {
-        //    console.log("  " + this.adjacencylist[i][j].to);
         let z = this.adjacencylist[i][j].to;
         graph[i][z] = parseFloat(this.adjacencylist[i][j].weight);
       }
@@ -576,14 +486,6 @@ class Graph {
         graph[i][z] = this.adjacencylist[i][j].weight;
       }
     }
-    console.log("00000");
-    console.log(graph);
-    // let graph=[
-    //   [0,10,6,5],
-    //   [0,0,0,15],
-    //   [0,0,0,4],
-    //   [0,0,0,0]
-    // ];
     let E=0;
     let edges=[]
     for(let i=0; i<graph.length; i++)
@@ -598,7 +500,6 @@ class Graph {
   }
   CoefficientClustering()
   {
-    console.log(this.adjacencylist)
     let result=[]
     for(let i = 0; i <this.vertices;i++)
     {
@@ -616,6 +517,7 @@ class Graph {
         {
           for(let z=0;z<neighbours.length;z++)
           {
+  
             if(neighbours[j]!=neighbours[z])
             { 
               if(this.adjacencylist[neighbours[j]][k].to==neighbours[z])
@@ -628,7 +530,6 @@ class Graph {
       }
       result.push({source:i,neighbours:neighbourscount,count:joiningNeighbours/2});
     }
-    console.log(result);
     let res=0,answer=[];
     for(let i=0; i<result.length; i++) 
     { 
@@ -641,7 +542,8 @@ class Graph {
         res+=CCV;
       }
     }
-    answer.push(res);
+    answer.push(res/this.vertices);
+    console.log(result)
     return answer;
   }
 }
