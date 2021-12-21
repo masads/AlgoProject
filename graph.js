@@ -19,10 +19,12 @@ class Graph {
     }
   }
   primMST(graph) {
+    console.log(graph);
     let length = graph.length;
+    let INF=100000000;
     let minKey = (key, mstSet, length) => {
       // Initialize min value
-      let min = Number.MAX_VALUE,
+      let min = INF,
         min_index;
 
       for (let v = 0; v < length; v++)
@@ -42,7 +44,7 @@ class Graph {
 
     // Initialize all keys as INFINITE
     for (let i = 0; i < length; i++)
-      (key[i] = Number.MAX_VALUE), (mstSet[i] = false);
+      (key[i] = INF), (mstSet[i] = false);
 
     // Always include first 1st vertex in MST.
     // Make key 0 so that this vertex is picked as first vertex.
@@ -63,11 +65,13 @@ class Graph {
       // Consider only those vertices which are not
       // yet included in MST
       for (let v = 0; v < length; v++)
+      {
         // graph[u][v] is non zero only for adjacent vertices of m
         // mstSet[v] is false for vertices not yet included in MST
         // Update the key only if graph[u][v] is smaller than key[v]
         if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
-          (parent[v] = u), (key[v] = graph[u][v]);
+          {(parent[v] = u), (key[v] = graph[u][v]);}
+      }
     }
 
     // print the constructed MST
@@ -116,7 +120,7 @@ class Graph {
       result.push({ from: a, to: b, cost: min });
       mincost += min;
     }
-    console.log(`<br> Minimum cost= ${mincost} <br>`);
+    result.push({ cost:mincost});
     return result;
   }
   minDistance(dist, sptSet, V) {
@@ -145,7 +149,7 @@ class Graph {
   }
   DprintSolution(dist, V, parent, src) {
     let path = [];
-    for (let i = 0; i < V; i++) {
+    for (let i = 0; i <=V; i++) {
       path.push([]);
     }
     console.log(path);
@@ -159,9 +163,11 @@ class Graph {
       }
       path[i] = path[i].reverse();
     }
+    path[V]=dist;
     return path;
   }
   dijkstra(graph, src) {
+    let INF=1000000;
     let V = graph.length;
     let dist = new Array(V);
     let sptSet = new Array(V);
@@ -169,8 +175,7 @@ class Graph {
     // Initialize all distances as
     // INFINITE and stpSet[] as false
     for (let i = 0; i < V; i++) {
-      parent[0] = -1;
-      dist[i] = Number.MAX_VALUE;
+      dist[i] = INF;
       sptSet[i] = false;
       // path[i]=[];
     }
@@ -178,7 +183,7 @@ class Graph {
     // Distance of source vertex
     // from itself is always 0
     dist[src] = 0;
-
+    parent[src] = -1;
     // Find shortest path for all vertices
     for (let count = 0; count < V - 1; count++) {
       // Pick the minimum distance vertex
@@ -214,7 +219,7 @@ class Graph {
     return this.DprintSolution(dist, V, parent, src);
   }
   BprintPath(parent, vertex, source, j) {
-    if (vertex < 0 || j > 20) {
+    if (vertex < 0 ) {
       return [];
     }
 
@@ -229,7 +234,7 @@ class Graph {
   }
   BellmanFord(graph, V, E, src) {
     // Initialize distance of all vertices as infinite.
-    var dis = Array(V).fill(1000000000);
+    let dis = Array(V).fill(1000000000);
     let parent = new Array(V).fill(-1);
     // initialize distance of source as 0
     dis[src] = 0;
@@ -264,21 +269,22 @@ class Graph {
       }
     }
     let path = [];
-    for (let i = 0; i < V; i++) {
+    for (let i = 0; i <=V; i++) {
       path.push([]);
     }
     path[0] = [0];
     console.log("Vertex Distance from Source<br>");
-    for (var i = 1; i < V; i++) {
+    for (var i = 0; i < V; i++) {
       console.log(i + "   " + dis[i] + "  path:");
       path[i] = [...this.BprintPath(parent, i, src, 0)];
       path[i] = path[i].reverse();
     }
+    path[V]=dis;
     return path;
   }
   constructPath(Next,u, v)
   {
-      
+      console.log(Next)
       // If there's no path between
       // node u and v, simply return
       // an empty array
@@ -405,6 +411,7 @@ class Graph {
 
     }
     console.log("weight of MST:"+MSTweight)
+    result.push({cost:MSTweight})
     return result;
   }
   MakePrims() {
@@ -461,9 +468,22 @@ class Graph {
     for (let i = 0; i < this.vertices; ++i) {
       for (let j = 0; j < this.adjacencylist[i].length; ++j) {
         let z = this.adjacencylist[i][j].to;
-        graph[i][z] = this.adjacencylist[i][j].weight;
+        graph[i][z] = parseInt(this.adjacencylist[i][j].weight);
       }
     }
+    console.log(graph);
+  //   let graph = [ 
+  //     [ 0, 4, 0, 0, 0, 0, 0, 8, 0 ],
+  //     [ 4, 0, 8, 0, 0, 0, 0, 11, 0 ],
+  //     [ 0, 8, 0, 7, 0, 4, 0, 0, 2 ],
+  //     [ 0, 0, 7, 0, 9, 14, 0, 0, 0 ],
+  //     [ 0, 0, 0, 9, 0, 10, 0, 0, 0 ],
+  //     [ 0, 0, 4, 14, 10, 0, 2, 0, 0 ],
+  //     [ 0, 0, 0, 0, 0, 2, 0, 1, 6 ],
+  //     [ 8, 11, 0, 0, 0, 0, 1, 0, 7 ],
+  //     [ 0, 0, 2, 0, 0, 0, 6, 7, 0 ] 
+  // ];
+
     return this.dijkstra(graph, s);
   }
   MakeBellman(src) {
@@ -473,11 +493,12 @@ class Graph {
       for (let j = 0; j < this.adjacencylist[i].length; j++) {
         graph.push([
           i,
-          this.adjacencylist[i][j].to,
-          this.adjacencylist[i][j].weight,
+          parseInt(this.adjacencylist[i][j].to),
+          parseFloat(this.adjacencylist[i][j].weight),
         ]);
       }
     }
+    console.log(graph);
     // var graph = [
     //         [ 0, 1, -1 ],
     //         [ 0, 2, 4 ],
@@ -514,13 +535,9 @@ class Graph {
       for (let j = 0; j < this.adjacencylist[i].length; ++j) {
         //    console.log("  " + this.adjacencylist[i][j].to);
         let z = this.adjacencylist[i][j].to;
-        graph[i][z] = this.adjacencylist[i][j].weight;
+        graph[i][z] = parseFloat(this.adjacencylist[i][j].weight);
       }
     }
-    // let graph = [ [ 0, 3, INF, 7 ],
-    //             [ 8, 0, 2, INF ],
-    //             [ 5, INF, 0, 1 ],
-    //             [ 2, INF, INF, 0 ] ];
     let dis = new Array(MAXN);
     let Next = new Array(MAXN);
     for(let i = 0; i < MAXN; i++)
@@ -559,6 +576,7 @@ class Graph {
         graph[i][z] = this.adjacencylist[i][j].weight;
       }
     }
+    console.log("00000");
     console.log(graph);
     // let graph=[
     //   [0,10,6,5],
@@ -575,7 +593,7 @@ class Graph {
         if(graph[i][j]!=0){E++;edges.push({u:i,v:j,w:graph[i][j]})}
       }
     }
-    console.log(edges)
-    return this.boruvka(graph,this.vertices,E,edges);
+    console.log(edges);
+    return this.boruvka(this.vertices,E,edges);
   }
 }
