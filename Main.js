@@ -329,14 +329,15 @@ function Boruvka()
             {
                 setTimeout(() => {
                 VisData.edges._data[`${id}`]["color"]={color:'red'};
+                VisData.edges._data[`${id}`].hidden = false;
                 network = new vis.Network(container, VisData, options);
                 }, 10*j);
             }
-            // else
-            // {
-            //     delete VisData.edges._data[`${id}`];
-            //     network = new vis.Network(container, VisData, options);
-            // }
+            else
+            {
+                VisData.edges._data[`${id}`].hidden = true;
+                network = new vis.Network(container, VisData, options);
+            }
         }
     }
     document.getElementById("cost").innerText=result[result.length - 1].cost;
