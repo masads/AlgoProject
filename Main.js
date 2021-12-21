@@ -30,7 +30,6 @@ function MakeGraph(data)
     {
         arrowOrNot="";
     }
-    console.log(arrowOrNot)
     for(let i=0;i<graphData.totalnodes;i++)
     {
         for(let j=0;j<Object.keys(graphData[i].nodeTo).length;j++)
@@ -193,11 +192,6 @@ function Dijkstra()
                 }, 10*j);
                 sum+=parseFloat(VisData.edges._data[`${id}`]["label"]);
             }
-            // else
-            // {
-            //     delete VisData.edges._data[`${id}`];
-            //     network = new vis.Network(container, VisData, options);
-            // }
         }
     }
     document.getElementById("cost").innerText=sum;
@@ -242,11 +236,6 @@ function BellmanFord()
                 }, 10*j);
                 break;
             }
-            // else
-            // {
-            //     delete VisData.edges._data[`${id}`];
-            //     network = new vis.Network(container, VisData, options);
-            // }
         }
     }
     document.getElementById("cost").innerText=result[result.length-1][to];
@@ -291,11 +280,6 @@ function Floyd()
                 sum+=parseFloat(VisData.edges._data[`${id}`]["label"]);
                 break;
             }
-            // else
-            // {
-            //     delete VisData.edges._data[`${id}`];
-            //     network = new vis.Network(container, VisData, options);
-            // }
         }
     }
     document.getElementById("cost").innerText=sum;
@@ -319,6 +303,7 @@ function Boruvka()
         {
             let u=result[j].to;
             let v=result[j].from;
+            if(u==-1 && v==-1){continue;}
             if(v<u)
             {
                 let temp=u;
@@ -327,16 +312,13 @@ function Boruvka()
             }
              if(u==VisData.edges._data[`${id}`].from && v==VisData.edges._data[`${id}`].to)
             {
+                result[j].to=-1;
+                result[j].from=-1;
                 setTimeout(() => {
                 VisData.edges._data[`${id}`]["color"]={color:'red'};
                 VisData.edges._data[`${id}`].hidden = false;
                 network = new vis.Network(container, VisData, options);
                 }, 10*j);
-            }
-            else
-            {
-                VisData.edges._data[`${id}`].hidden = true;
-                network = new vis.Network(container, VisData, options);
             }
         }
     }
