@@ -629,7 +629,7 @@ class Graph {
       result.push({source:i,neighbours:neighbourscount,count:joiningNeighbours/2});
     }
     console.log(result);
-    let res=0;
+    let res=0,answer=[];
     for(let i=0; i<result.length; i++) 
     { 
       let a=(2*(result[i].count));
@@ -637,9 +637,11 @@ class Graph {
       let CCV=a/b;
       if(CCV>=0)
       {
+        answer.push(CCV);
         res+=CCV;
       }
     }
-    console.log(res)
+    answer.push(res);
+    return answer;
   }
 }

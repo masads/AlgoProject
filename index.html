@@ -12,12 +12,12 @@
     <div class="container">
       <h1>Algo Project</h1>
         <div class="row">
-          <div class="col-auto">
+          <div class="col-auto" style="margin-top:0.5em">
             <label for="myFile" class="form-label">File input example</label>
             <input class="form-control" type="file" name="myFile" id="myFile" accept=".txt" required>
           </div>
-          <div class="col-auto">
-            <label for="showAlgo"   class="form-label">Choose Algorithm</label>
+          <div class="col-auto" style="margin-top:0.5em">
+            <label for="showAlgo"class="form-label">Choose Algorithm</label>
             <select class="form-select" id="showAlgo" name="showalgo" required>
               <option>Prims</option>
               <option>Kruskal</option>
@@ -28,22 +28,25 @@
               <option>Boruvka's</option>
             </select>
           </div>
-          <div class="col-auto" style="margin-top:0.5em">
+          <div class="col-auto" style="margin-top:1em">
             <br>
             <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1">From</span>
               <input id="from" type="number" value="0" class="form-control" placeholder="from" aria-describedby="basic-addon1">
               <span class="input-group-text" id="basic-addon1">To</span>
               <input id="to" type="number" value="0" class="form-control" placeholder="To" aria-describedby="basic-addon1">
-              <span class="input-group-text" id="basic-addon1">Cost:</span><span id="cost" class="input-group-text" id="basic-addon1"></span>
             </div>
           </div>
-        </div>
         <div class="row">
+          <div class="col-auto" style="margin-top:1.2em">
+            <div class="input-group mb-3">
+              <span id="Answer" class="input-group-text" id="basic-addon1">Answer:</span><span id="cost" class="input-group-text" id="basic-addon1">None</span>
+            </div>
+          </div>
           <div class="col-auto">
             <br>
-            <button id="submit" style="margin-top: 0.5em;" type="submit" class="btn btn-primary" onclick="main();">Make Graph</button>
-            <button id="apply" style="margin-top: 0.5em;" type="submit" class="btn btn-primary" onclick="apply();">Apply Algorithm</button>
+            <button id="submit"  type="submit" class="btn btn-primary" onclick="main();">Make Graph</button>
+            <button id="apply"  type="submit" class="btn btn-primary" onclick="apply();">Apply Algorithm</button>
           </div>
         </div>
         <div class="row" id="diagram" style="margin-top: 2em;">
