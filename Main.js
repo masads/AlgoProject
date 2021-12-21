@@ -1,7 +1,6 @@
 let nodes,edges,network,graphData,options,VisData;
 let container=document.getElementById("mynetwork");
 document.getElementById("apply").onclick=apply;
-
 function MakeGraph(data)
 {
     graphData=data;
