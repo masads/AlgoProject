@@ -596,4 +596,50 @@ class Graph {
     console.log(edges);
     return this.boruvka(this.vertices,E,edges);
   }
+  CoefficientClustering()
+  {
+    console.log(this.adjacencylist)
+    let result=[]
+    for(let i = 0; i <this.vertices;i++)
+    {
+      let source=i;
+      let neighbourscount=this.adjacencylist[i].length;
+      let neighbours=[];
+      for(let j = 0; j < neighbourscount; j++)
+      {
+        neighbours.push(this.adjacencylist[i][j].to);
+      }
+      let joiningNeighbours=0;
+      for(let j = 0; j < neighbours.length; j++)
+      {
+        for(let k = 0; k < this.adjacencylist[neighbours[j]].length; k++)
+        {
+          for(let z=0;z<neighbours.length;z++)
+          {
+            if(neighbours[j]!=neighbours[z])
+            { 
+              if(this.adjacencylist[neighbours[j]][k].to==neighbours[z])
+              {
+                joiningNeighbours++;
+              }
+            }
+          }
+        }
+      }
+      result.push({source:i,neighbours:neighbourscount,count:joiningNeighbours/2});
+    }
+    console.log(result);
+    let res=0;
+    for(let i=0; i<result.length; i++) 
+    { 
+      let a=(2*(result[i].count));
+      let b=(result[i].neighbours)*(result[i].neighbours-1);
+      let CCV=a/b;
+      if(CCV>=0)
+      {
+        res+=CCV;
+      }
+    }
+    console.log(res)
+  }
 }
